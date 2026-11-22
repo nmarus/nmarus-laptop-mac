@@ -1,0 +1,80 @@
+---
+- name: Update Homebrew
+  community.general.homebrew:
+    update_homebrew: true
+  when: homebrew_update | bool
+  changed_when: false
+
+- name: Tap Homebrew repositories
+  community.general.homebrew_tap:
+    name: "{{ homebrew_taps }}"
+    state: present
+  when: homebrew_taps | length > 0
+
+- name: Read trusted Homebrew entries
+  ansible.builtin.command:
+    argv: ["{{ homebrew_path }}/brew", trust, --json=v1]
+  register: homebrew_trust_state
+  changed_when: false
+  check_mode: false
+  when: homebrew_trust.values() | flatten | length > 0
+
+- name: Trust third-party Homebrew entries
+  ansible.builtin.command:
+    argv: "{{ [homebrew_path ~ '/brew', 'trust', '--' ~ item.flag] + homebrew_trust_missing }}"
+  vars:
+    homebrew_trust_missing: >-
+      {{ homebrew_trust[item.kind] | default([])
+         | difference((homebrew_trust_state.stdout | from_json)[item.kind] | default([])) }}
+  loop:
+    - { kind: taps, flag: tap }
+    - { kind: formulae, flag: formula }
+    - { kind: casks, flag: cask }
+    - { kind: commands, flag: command }
+  loop_control:
+    label: "{{ item.kind }}"
+  changed_when: true
+  when:
+    - homebrew_trust_state is not skipped
+    - homebrew_trust_missing | length > 0
+
+- name: Install Homebrew formulae
+  community.general.homebrew:
+    name: "{{ homebrew_formulae }}"
+    path: "{{ homebrew_path }}"
+    state: present
+  when: homebrew_formulae | length > 0
+
+- name: Install Homebrew casks
+  community.general.homebrew_cask:
+    name: "{{ homebrew_casks }}"
+    path: "{{ homebrew_path }}"
+    state: present
+    install_options: "{{ homebrew_cask_install_options }}"
+    accept_external_apps: true
+  environment:
+    SUDO_ASKPASS: "{{ playbook_dir }}/scripts/askpass"
+  when: homebrew_casks | length > 0
+
+- name: Upgrade all Homebrew packages
+  community.general.homebrew:
+    upgrade_all: true
+    path: "{{ homebrew_path }}"
+  environment:
+    SUDO_ASKPASS: "{{ playbook_dir }}/scripts/askpass"
+  when: homebrew_upgrade_all | bool
+
+- name: Put Homebrew on the PATH for login shells (.zprofile)
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_facts['user_dir'] }}/.zprofile"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - homebrew shellenv"
+    create: true
+    mode: "0644"
+    block: |
+      for _brew in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+        if [ -x "$_brew" ]; then
+          eval "$("$_brew" shellenv zsh)"
+          break
+        fi
+      done
+      unset _brew

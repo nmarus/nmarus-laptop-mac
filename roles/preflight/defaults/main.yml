@@ -1,0 +1,11 @@
+---
+# Minimum supported macOS major version.
+preflight_min_macos_major: 15
+
+# Minimum supported ansible-core version.
+preflight_min_ansible_version: "2.21"
+
+# Homebrew prefixes to probe, in order.
+preflight_homebrew_prefixes:
+  - /opt/homebrew
+  - /usr/local

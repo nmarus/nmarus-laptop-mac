@@ -1,0 +1,66 @@
+---
+# Enable once per clone with `pre-commit install`.
+repos:
+  - repo: local
+    hooks:
+      - id: gitleaks
+        name: Scan staged changes for secrets (gitleaks)
+        entry: gitleaks git --pre-commit --staged --redact --no-banner --verbose
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: shellcheck
+        name: Lint shell scripts (shellcheck)
+        entry: shellcheck
+        language: system
+        types: [shell]
+
+      - id: ansible-lint
+        name: Lint the playbook and roles (ansible-lint)
+        entry: ansible-lint
+        language: system
+        pass_filenames: false
+        types: [yaml]
+
+      - id: prettier
+        name: Format Markdown (prettier)
+        entry: prettier --write --ignore-unknown
+        language: system
+        types: [markdown]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        name: Trim trailing whitespace
+        args: [--markdown-linebreak-ext=md]
+
+      - id: end-of-file-fixer
+        name: Fix end of files
+
+      - id: mixed-line-ending
+        name: Enforce LF line endings
+        args: [--fix=lf]
+
+      - id: check-yaml
+        name: Check YAML syntax
+
+      - id: check-json
+        name: Check JSON syntax
+        exclude: ^roles/zed/files/settings\.json$
+
+      - id: check-merge-conflict
+        name: Check for merge conflict markers
+
+      - id: check-added-large-files
+        name: Check for large files
+
+      - id: check-executables-have-shebangs
+        name: Check executables have shebangs
+
+      - id: check-shebang-scripts-are-executable
+        name: Check shebang scripts are executable
+
+      - id: detect-private-key
+        name: Detect private keys

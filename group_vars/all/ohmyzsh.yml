@@ -1,0 +1,16 @@
+---
+# oh-my-zsh theme and plugins.
+ohmyzsh_theme: bira
+
+ohmyzsh_plugins:
+  - brew
+  - colorize
+  - direnv
+  - docker
+  - fzf
+  - git
+  - gitignore
+  - macos
+  - pip
+  - python
+  - zoxide

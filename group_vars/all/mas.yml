@@ -1,0 +1,25 @@
+---
+# Mac App Store apps. Find ids with `mas search <app>`.
+mas_apps:
+  - name: CotEditor
+    id: 1024640650
+  - name: DaisyDisk
+    id: 411643860
+  - name: Developer
+    id: 640199958
+  - name: Keynote
+    id: 409183694
+  - name: Kindle
+    id: 302584613
+  - name: Logic Pro
+    id: 634148309
+  - name: Numbers
+    id: 409203825
+  - name: Pages
+    id: 409201541
+  - name: Quiver
+    id: 866773894
+  - name: WireGuard
+    id: 1451685025
+  - name: Xcode
+    id: 497799835

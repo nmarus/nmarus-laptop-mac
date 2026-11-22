@@ -1,0 +1,3 @@
+---
+# CLI tools installed with `uv tool install`.
+python_uv_tools: []

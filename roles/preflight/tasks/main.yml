@@ -1,0 +1,58 @@
+---
+- name: Report the machine being configured
+  ansible.builtin.debug:
+    msg: >-
+      {{ ansible_facts['hostname'] }} --
+      macOS {{ ansible_facts['distribution_version'] }}
+      ({{ ansible_facts['architecture'] }}),
+      user {{ ansible_facts['user_id'] }}
+
+- name: Assert a supported macOS version
+  ansible.builtin.assert:
+    that:
+      - ansible_facts['distribution_major_version'] | int >= preflight_min_macos_major
+    fail_msg: >-
+      macOS {{ ansible_facts['distribution_version'] }} is older than the
+      minimum supported version ({{ preflight_min_macos_major }}).
+    quiet: true
+
+- name: Assert a supported ansible-core version
+  ansible.builtin.assert:
+    that:
+      - ansible_version.full is version(preflight_min_ansible_version, '>=')
+    fail_msg: >-
+      ansible-core {{ ansible_version.full }} is older than the
+      minimum supported version ({{ preflight_min_ansible_version }}).
+    quiet: true
+
+- name: Check for the Xcode command line tools
+  ansible.builtin.command: xcode-select --print-path
+  register: preflight_xcode
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: Fail when the Xcode command line tools are missing
+  ansible.builtin.fail:
+    msg: >-
+      The Xcode command line tools are required. Install them with
+      `xcode-select --install`, then re-run this playbook.
+  when: preflight_xcode.rc != 0
+
+- name: Check for Homebrew
+  ansible.builtin.stat:
+    path: "{{ item }}/bin/brew"
+  loop: "{{ preflight_homebrew_prefixes }}"
+  register: preflight_brew
+
+- name: Record the Homebrew prefix
+  ansible.builtin.set_fact:
+    preflight_homebrew_prefix: >-
+      {{ preflight_brew.results | selectattr('stat.exists') | map(attribute='item') | first | default('') }}
+
+- name: Fail when Homebrew is missing
+  ansible.builtin.fail:
+    msg: >-
+      Homebrew was not found in {{ preflight_homebrew_prefixes | join(' or ') }}.
+      Run `scripts/bootstrap.sh` to install the prerequisites.
+  when: preflight_homebrew_prefix | length == 0

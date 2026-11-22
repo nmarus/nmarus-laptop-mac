@@ -1,0 +1,30 @@
+---
+- name: Install oh-my-zsh with the official installer
+  ansible.builtin.shell:
+    cmd: sh -c "$(curl -fsSL {{ ohmyzsh_installer_url }})" "" --unattended
+    creates: "{{ ohmyzsh_dir }}"
+  environment:
+    REMOTE: "{{ ohmyzsh_remote }}"
+    BRANCH: "{{ ohmyzsh_branch }}"
+
+- name: Set the oh-my-zsh theme in .zshrc
+  ansible.builtin.replace:
+    path: "{{ ansible_facts['user_dir'] }}/.zshrc"
+    regexp: '^ZSH_THEME=.*$'
+    replace: 'ZSH_THEME="{{ ohmyzsh_theme }}"'
+
+- name: Set the oh-my-zsh plugins in .zshrc
+  ansible.builtin.replace:
+    path: "{{ ansible_facts['user_dir'] }}/.zshrc"
+    regexp: '^plugins=\(.*\)$'
+    replace: 'plugins=({{ ohmyzsh_plugins | join(" ") }})'
+
+- name: Wire Homebrew zsh-completions into .zshrc
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_facts['user_dir'] }}/.zshrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - zsh-completions"
+    insertbefore: '^source \$ZSH/oh-my-zsh\.sh'
+    create: true
+    mode: "0644"
+    block: |
+      [ -n "$HOMEBREW_PREFIX" ] && FPATH="$HOMEBREW_PREFIX/share/zsh-completions:$FPATH"

@@ -1,0 +1,81 @@
+---
+- name: Ensure the nvm directory exists
+  ansible.builtin.file:
+    path: "{{ node_nvm_dir }}"
+    state: directory
+    mode: "0755"
+  when: node_versions | length > 0
+
+- name: Check which requested Node versions are already installed
+  ansible.builtin.shell:
+    cmd: |
+      set -eu
+      export NVM_DIR={{ node_nvm_dir | quote }}
+      . {{ node_nvm_sh | quote }}
+      nvm version {{ item | quote }} || true
+    executable: /bin/bash
+  loop: "{{ node_versions }}"
+  register: node_version_check
+  changed_when: false
+  check_mode: false
+
+- name: Install missing Node versions with nvm
+  ansible.builtin.shell:
+    cmd: |
+      set -eu
+      export NVM_DIR={{ node_nvm_dir | quote }}
+      . {{ node_nvm_sh | quote }}
+      nvm install {{ item.item | quote }}
+    executable: /bin/bash
+  loop: "{{ node_version_check.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stdout == 'N/A'
+  changed_when: true
+
+- name: Set the default Node version
+  ansible.builtin.copy:
+    content: "{{ node_default_alias }}\n"
+    dest: "{{ node_nvm_dir }}/alias/default"
+    mode: "0644"
+  when: node_default_alias | length > 0
+
+- name: Load nvm from .zshrc
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_facts['user_dir'] }}/.zshrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - nvm"
+    create: true
+    mode: "0644"
+    block: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \
+        . "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
+      [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \
+        . "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
+
+- name: Resolve the default Node bin directory
+  ansible.builtin.shell:
+    cmd: |
+      set -eu
+      export NVM_DIR={{ node_nvm_dir | quote }}
+      . {{ node_nvm_sh | quote }}
+      p=$(nvm which default 2>/dev/null || true)
+      [ -n "$p" ] && dirname "$p" || true
+    executable: /bin/bash
+  register: node_default_bin
+  changed_when: false
+  check_mode: false
+  when: node_global_packages | length > 0
+
+- name: Install global npm packages
+  community.general.npm:
+    name: "{{ item }}"
+    global: true
+    executable: "{{ node_default_bin.stdout }}/npm"
+    state: present
+  environment:
+    PATH: "{{ node_default_bin.stdout }}:{{ ansible_facts['env']['PATH'] }}"
+  loop: "{{ node_global_packages }}"
+  when:
+    - node_global_packages | length > 0
+    - node_default_bin.stdout is match('/')

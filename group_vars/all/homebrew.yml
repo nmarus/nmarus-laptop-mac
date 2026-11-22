@@ -1,0 +1,206 @@
+---
+# Additional taps beyond homebrew/core and homebrew/cask.
+homebrew_taps:
+  - azure/azd
+  - bufbuild/buf
+  - hashicorp/tap
+  - hulryung/tap
+  - powershell/tap
+  - terraform-linters/tap
+
+# Third-party tap entries Homebrew may load.
+homebrew_trust:
+  taps:
+    - azure/azd
+    - bufbuild/buf
+    - hashicorp/tap
+    - powershell/tap
+  casks:
+    - hulryung/tap/markdown-prism
+    - terraform-linters/tap/tflint
+
+# CLI packages: `brew install <name>`
+homebrew_formulae:
+  # Configuration management
+  - ansible
+  - ansible-lint
+
+  # Cloud and infrastructure as code
+  - awscli
+  - azqr
+  - azure-dev
+  - docker-compose
+  - hashicorp/tap/packer
+  - hashicorp/tap/terraform
+  - infracost
+  - terraform-docs
+  - terragrunt
+
+  # Security scanning
+  - checkov
+  - gitleaks
+  - trivy
+
+  # Git and CI
+  - act
+  - actionlint
+  - gh
+  - git
+  - git-delta
+  - git-filter-repo
+  - git-lfs
+  - lazygit
+  - pre-commit
+
+  # Shell
+  - direnv
+  - fzf
+  - tmux
+  - zoxide
+  - zsh
+  - zsh-completions
+
+  # Files and search
+  - diffutils
+  - fd
+  - midnight-commander
+  - ripgrep
+  - trash
+  - tree
+
+  # JSON and YAML
+  - jq
+  - yq
+
+  # System monitors
+  - btop
+  - gotop
+  - htop
+
+  # Editors
+  - cask
+  - emacs
+  - markdown-oxide
+  - vim
+
+  # Networking
+  - nmap
+  - ntp
+  - sshpass
+  - telnet
+  - wget
+  - wireguard-tools
+
+  # Terminal web browsers
+  - bombadillo
+  - felinks
+  - lynx
+
+  # Languages and runtimes
+  - go
+  - node
+  - nvm
+  - bun
+  - pnpm
+  - uv
+  - jupyterlab
+  - pydantic
+  - ruby
+  - rbenv
+  - rbenv-default-gems
+  - rustup
+  - lua
+  - luarocks
+  - powershell
+  - buf
+  - protoc-gen-go
+  - protoc-gen-go-grpc
+
+  # Build tools
+  - cmake
+  - make
+
+  # Linters and formatters
+  - ast-grep
+  - biome
+  - oxlint
+  - prettier
+  - pyright
+  - rubocop
+  - ruff
+  - shellcheck
+  - ty
+
+  # Documents
+  - glow
+  - hugo
+  - pandoc
+  - poppler
+
+  # Images, audio and video
+  - exiftool
+  - ffmpeg
+  - imagemagick
+  - tesseract
+
+  # AI tooling
+  - hf
+  - llm
+  - opencode
+  - pi-coding-agent
+  - qwen-code
+  - rtk
+
+# Flags for `brew install --cask`.
+homebrew_cask_install_options:
+  - adopt
+
+# GUI applications: `brew install --cask <name>`
+homebrew_casks:
+  - adguard
+  - appcleaner
+  - azure-cli
+  - chatgpt
+  - cherry-studio
+  - claude
+  - claude-code@latest
+  - codex
+  - copilot-cli
+  - cryptomator
+  - cyberduck
+  - displaylink
+  - dotnet-sdk
+  - dropbox
+  - electrum
+  - firefox
+  - fuse-t
+  - ghostty
+  - google-chrome
+  - halloy
+  - handbrake-app
+  - hulryung/tap/markdown-prism
+  - keepingyouawake
+  - libreoffice
+  - lm-studio
+  - lm-studio-bionic
+  - logseq
+  - loop
+  - mac-mouse-fix
+  - minecraft
+  - nvidia-sync
+  - obsidian
+  - private-internet-access
+  - raspberry-pi-imager
+  - spotify
+  - steam
+  - terraform-linters/tap/tflint
+  - tor-browser
+  - transmission
+  - unity-hub
+  - usenapp
+  - visual-studio-code
+  - vlc
+  - windows-app
+  - xmind
+  - zed
+  - zoom

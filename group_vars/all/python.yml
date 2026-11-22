@@ -1,0 +1,4 @@
+---
+# Installed with `uv tool install`.
+python_uv_tools:
+  - crawl4ai

@@ -1,0 +1,12 @@
+---
+node_nvm_dir: "{{ ansible_facts['user_dir'] }}/.nvm"
+node_nvm_sh: "{{ homebrew_prefix }}/opt/nvm/nvm.sh"
+
+# Versions to install, in nvm syntax.
+node_versions: []
+
+# nvm default alias.
+node_default_alias: ""
+
+# Global npm packages for the default Node version.
+node_global_packages: []

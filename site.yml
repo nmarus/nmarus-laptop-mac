@@ -1,0 +1,51 @@
+---
+- name: Configure this Mac
+  hosts: localhost
+  connection: local
+  gather_facts: true
+  become: false
+
+  pre_tasks:
+    - name: Refuse to run against anything other than this machine
+      ansible.builtin.assert:
+        that:
+          - inventory_hostname in ['localhost', '127.0.0.1']
+          - ansible_connection | default('local') == 'local'
+          - ansible_facts['system'] == 'Darwin'
+        fail_msg: >-
+          This repository only ever configures the machine it is executed on.
+          It must run with connection=local against localhost on macOS.
+        success_msg: "Targeting the local machine ({{ ansible_facts['hostname'] }})."
+        quiet: true
+      tags: [always]
+
+  roles:
+    - role: preflight
+      tags: [always]
+
+    - role: homebrew
+      tags: [homebrew, packages]
+
+    - role: mas
+      tags: [mas, packages]
+
+    - role: ohmyzsh
+      tags: [ohmyzsh, shell]
+
+    - role: git
+      tags: [git]
+
+    - role: zed
+      tags: [zed]
+
+    - role: node
+      tags: [node, languages]
+
+    - role: python
+      tags: [python, languages]
+
+    - role: ruby
+      tags: [ruby, languages]
+
+    - role: macos
+      tags: [macos, defaults]

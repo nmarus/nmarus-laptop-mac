@@ -1,0 +1,5 @@
+---
+# Mac App Store apps, as {name, id} entries.
+mas_apps: []
+
+mas_upgrade_all: false

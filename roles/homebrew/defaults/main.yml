@@ -1,0 +1,23 @@
+---
+homebrew_prefix: "{{ preflight_homebrew_prefix }}"
+homebrew_path: "{{ homebrew_prefix }}/bin"
+
+# Run `brew update` before installing.
+homebrew_update: false
+
+# Upgrade everything already installed.
+homebrew_upgrade_all: false
+
+homebrew_taps: []
+homebrew_formulae: []
+homebrew_casks: []
+
+# Third-party tap entries Homebrew may load (`brew trust`).
+homebrew_trust:
+  taps: []
+  formulae: []
+  casks: []
+  commands: []
+
+# Extra flags passed to `brew install --cask`, as bare names.
+homebrew_cask_install_options: []

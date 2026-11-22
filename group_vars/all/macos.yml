@@ -1,0 +1,44 @@
+---
+# macOS preferences.
+macos_defaults:
+  # Dock
+  - domain: com.apple.dock
+    key: orientation
+    type: string
+    value: left
+  - domain: com.apple.dock
+    key: tilesize
+    type: float
+    value: 56
+  - domain: com.apple.dock
+    key: show-recents
+    type: bool
+    value: false
+
+  # Finder
+  - domain: com.apple.finder
+    key: FXPreferredViewStyle
+    type: string
+    value: Nlsv
+  - domain: com.apple.finder
+    key: FXDefaultSearchScope
+    type: string
+    value: SCcf
+
+  # System-wide
+  - domain: NSGlobalDomain
+    key: AppleShowAllExtensions
+    type: bool
+    value: true
+  - domain: NSGlobalDomain
+    key: AppleInterfaceStyle
+    type: string
+    value: Dark
+  - domain: NSGlobalDomain
+    key: NSAutomaticCapitalizationEnabled
+    type: bool
+    value: true
+
+macos_defaults_restart_apps:
+  - Dock
+  - Finder

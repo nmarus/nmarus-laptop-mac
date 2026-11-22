@@ -1,0 +1,6 @@
+---
+# macOS preferences applied with community.general.osx_defaults.
+macos_defaults: []
+
+# Apps to restart after preferences change.
+macos_defaults_restart_apps: []

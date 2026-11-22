@@ -1,0 +1,9 @@
+---
+- name: Install Ruby gems
+  community.general.gem:
+    name: "{{ item }}"
+    executable: "{{ homebrew_path }}/gem"
+    user_install: true
+    bindir: "{{ ruby_gem_bindir }}"
+    state: present
+  loop: "{{ ruby_gems }}"

@@ -1,0 +1,19 @@
+---
+git_global_config:
+  - name: user.name
+    value: Nicholas Marus
+  - name: user.email
+    value: nmarus@gmail.com
+  - name: color.ui
+    value: "true"
+  - name: init.defaultBranch
+    value: main
+  # delta pager
+  - name: core.pager
+    value: delta
+  - name: interactive.diffFilter
+    value: delta --color-only
+  - name: delta.navigate
+    value: "true"
+  - name: merge.conflictStyle
+    value: zdiff3

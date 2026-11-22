@@ -1,0 +1,6 @@
+---
+# Gems installed with Homebrew's Ruby.
+ruby_gems: []
+
+# Where gem executables go.
+ruby_gem_bindir: "{{ ansible_facts['user_dir'] }}/.local/bin"

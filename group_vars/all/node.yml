@@ -1,0 +1,9 @@
+---
+node_versions:
+  - lts/*
+
+node_default_alias: lts/*
+
+# npm-only CLIs, installed globally into the default Node version.
+node_global_packages:
+  - "@larksuite/cli"

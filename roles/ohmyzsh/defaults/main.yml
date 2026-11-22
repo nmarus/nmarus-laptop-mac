@@ -1,0 +1,12 @@
+---
+ohmyzsh_dir: "{{ ansible_facts['user_dir'] }}/.oh-my-zsh"
+
+# Official installer and the source it checks out.
+ohmyzsh_installer_url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+ohmyzsh_remote: https://github.com/ohmyzsh/ohmyzsh.git
+ohmyzsh_branch: master
+
+# Fallbacks matching oh-my-zsh's template defaults.
+ohmyzsh_theme: robbyrussell
+ohmyzsh_plugins:
+  - git

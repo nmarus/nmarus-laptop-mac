@@ -1,0 +1,4 @@
+---
+# Installed with `gem install --user-install`.
+ruby_gems:
+  - brakeman

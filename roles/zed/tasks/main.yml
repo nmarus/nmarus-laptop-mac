@@ -1,0 +1,12 @@
+---
+- name: Ensure the Zed config directory exists
+  ansible.builtin.file:
+    path: "{{ zed_config_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Install Zed settings
+  ansible.builtin.copy:
+    src: settings.json
+    dest: "{{ zed_config_dir }}/settings.json"
+    mode: "0644"

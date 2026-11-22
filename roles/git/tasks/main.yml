@@ -1,0 +1,21 @@
+---
+- name: Apply global git configuration
+  community.general.git_config:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    scope: global
+  loop: "{{ git_global_config }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Ensure the git config directory exists
+  ansible.builtin.file:
+    path: "{{ git_config_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Install the global gitignore
+  ansible.builtin.copy:
+    src: ignore
+    dest: "{{ git_config_dir }}/ignore"
+    mode: "0644"

@@ -1,0 +1,26 @@
+---
+- name: Install the mas CLI
+  community.general.homebrew:
+    name: mas
+    path: "{{ homebrew_path }}"
+    state: present
+  when: mas_apps | length > 0 or mas_upgrade_all | bool
+
+- name: Install Mac App Store apps
+  community.general.mas:
+    id: "{{ mas_apps | map(attribute='id') | list }}"
+    state: present
+  when: mas_apps | length > 0
+
+- name: Check whether the mas CLI is installed
+  ansible.builtin.stat:
+    path: "{{ homebrew_path }}/mas"
+  register: mas_cli
+  when: mas_upgrade_all | bool
+
+- name: Upgrade Mac App Store apps
+  community.general.mas:
+    upgrade_all: true
+  when:
+    - mas_upgrade_all | bool
+    - mas_cli.stat.exists | default(false)

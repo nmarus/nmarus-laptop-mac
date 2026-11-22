@@ -1,0 +1,36 @@
+# Galaxy content installed by `make install`
+.ansible/
+
+# Ansible runtime artifacts
+*.retry
+*.log
+
+# Secrets
+.vault_pass*
+.vault-pass*
+.env
+.env.*
+
+# Python virtualenv
+.venv/
+
+# Language tool caches
+__pycache__/
+node_modules/
+
+# Agent toolkit output
+.claude/
+.opencode/
+.pi/
+AGENTS.md
+.mcp.json
+.claudeignore
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# macOS
+.DS_Store
+._*

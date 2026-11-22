@@ -1,0 +1,17 @@
+---
+- name: Apply macOS preferences
+  community.general.osx_defaults:
+    domain: "{{ item.domain | default('NSGlobalDomain') }}"
+    host: "{{ item.host | default(omit) }}"
+    key: "{{ item.key }}"
+    type: "{{ item.type | default('string') }}"
+    value: "{{ item.value }}"
+    state: "{{ item.state | default('present') }}"
+  become: "{{ item.sudo | default(false) }}"
+  loop: "{{ macos_defaults }}"
+  loop_control:
+    label: "{{ item.domain | default('NSGlobalDomain') }}.{{ item.key }}"
+  notify: Restart affected apps
+
+- name: Flush handlers so preference changes take effect now
+  ansible.builtin.meta: flush_handlers
